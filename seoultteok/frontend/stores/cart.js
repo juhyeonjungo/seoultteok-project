@@ -17,27 +17,26 @@ export const useCartStore = defineStore('cart', {
 
   actions: {
     addToCart(product) {
-      const existing = this.items.find(item => item.id === product.id)
+      const existing = this.items.find(item => item.productId === product.productId)
       if (existing) {
         existing.quantity++
       } else {
         this.items.push({
-          id: product.id,
+          productId: product.productId,
           name: product.name,
-          price: product.price,
+          price: product.retailPrice,
           quantity: 1,
-          image: product.image,
+          image: product.imageUrl,
         })
       }
     },
     removeFromCart(productId) {
-      this.items = this.items.filter(item => item.id !== productId)
+      this.items = this.items.filter(item => item.productId !== productId)
     },
     updateQuantity(productId, quantity) {
-      const item = this.items.find(item => item.id === productId)
+      const item = this.items.find(item => item.productId === productId)
       if (item) item.quantity = quantity
     },
-    
     clearCart() {
       this.items = []
     },

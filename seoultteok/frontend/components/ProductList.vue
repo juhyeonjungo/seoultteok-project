@@ -12,14 +12,14 @@
         <div class="slider" ref="sliderRef">
           <div
             v-for="product in productStore.products"
-            :key="product.id"
+            :key="product.productId"
             class="card"
           >
-            <img :src="product.image" :alt="product.name" class="card-img" />
+            <img :src="product.imageUrl" :alt="product.name" class="card-img" />
             <div class="card-body">
               <button class="add-btn" @click="cartStore.addToCart(product)">담기</button>
               <h3 class="name">{{ product.name }}</h3>
-              <p class="price">{{ product.price.toLocaleString() }}원</p>
+              <p class="price">{{ product.retailPrice.toLocaleString() }}원</p>
             
             </div>
           </div>
@@ -36,9 +36,14 @@
 import { ref } from 'vue'
 import { useProductStore } from '@/stores/products'
 import { useCartStore } from '@/stores/cart'
+import { onMounted } from 'vue'
 const productStore = useProductStore()
 const sliderRef = ref(null)
 const cartStore = useCartStore()
+
+onMounted(async () => {
+  await productStore.loadProducts()
+})
 
 const scrollLeft = () => {
   sliderRef.value.scrollBy({

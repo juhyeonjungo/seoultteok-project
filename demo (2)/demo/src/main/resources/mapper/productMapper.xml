@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.domain.product.mapper.ProductMapper">
+
+    <select id="findAll" resultType="com.example.demo.domain.product.dto.ProductDTO">
+        SELECT
+            PRODUCT_ID as productId,
+            NAME as name,
+            DESCRIPTION as description,
+            STOCK as stock,
+            IMAGE_URL as imageUrl,
+            CATEGORY as category,
+            CREATED_AT as createdAt,
+            RETAIL_PRICE as retailPrice,
+            BULK_PRICE as bulkPrice
+        FROM PRODUCT
+    </select>
+
+</mapper>

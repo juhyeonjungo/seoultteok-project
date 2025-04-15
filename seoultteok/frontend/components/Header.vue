@@ -11,10 +11,10 @@
       <div class="menu-box">
         <input type="text" placeholder="떡 검색하기..." class="search-input" />
         <nav class="top-menu">
-          <a href="#">로그인</a>
-          <a href="#">회원가입</a>
-          <a href="#">장바구니</a>
-          <a href="#">고객센터</a>
+          <NuxtLink to="/login">로그인</NuxtLink>
+          <NuxtLink to="/signup">회원가입</NuxtLink>
+          <NuxtLink to="/cart">장바구니</NuxtLink>
+          <NuxtLink to="/support">고객센터</NuxtLink>
         </nav>
       </div>
     </div>

@@ -8,12 +8,12 @@
           :key="product.id"
           class="card"
         >
-          <img :src="product.image" :alt="product.name" class="card-img" />
+          <img :src="product.imageUrl" :alt="product.name" class="card-img" />
           <div class="card-body">
             <h4 class="desc">{{ product.commentTitle }}</h4>
             <p class="desc-sub">{{ product.commentText }}</p>
             <h3 class="name">{{ product.name }}</h3>
-            <p class="price">{{ product.price.toLocaleString() }}원</p>
+            <p class="price">{{ product.retailPrice.toLocaleString() }}원</p>
           </div>
         </div>
       </div>
@@ -22,28 +22,36 @@
 </template>
 
 <script setup>
+import { onMounted, computed } from 'vue'
 import { useProductStore } from '@/stores/products'
 
 const productStore = useProductStore()
 
-// 🔥 베스트 3개만 지정
-const bestProducts = [
-  {
-    ...productStore.products.find(p => p.name === '꿀떡'),
-    commentTitle: '단 게 땡긴다면?',
-    commentText: '달콤한 꿀과 촉촉한 식감의 꿀떡 추천!',
-  },
-  {
-    ...productStore.products.find(p => p.name === '쑥땅콩모찌'),
-    commentTitle: '고소한 간식이 필요하다면?',
-    commentText: '쑥의 향과 땅콩의 고소함이 가득한 쑥모찌!',
-  },
-  {
-    ...productStore.products.find(p => p.name === '영양모듬떡'),
-    commentTitle: '든든한 한 끼로도 좋아요!',
-    commentText: '영양 가득한 모듬떡으로 한 끼 해결!',
-  },
-]
+onMounted(() => {
+  productStore.loadProducts()
+})
+
+const bestProducts = computed(() => {
+  if (!productStore.products.length) return []
+
+  return [
+    {
+      ...productStore.products.find(p => p.name === '꿀떡'),
+      commentTitle: '단 게 땡긴다면?',
+      commentText: '달콤한 꿀과 촉촉한 식감의 꿀떡 추천!',
+    },
+    {
+      ...productStore.products.find(p => p.name === '쑥땅콩모찌'),
+      commentTitle: '고소한 간식이 필요하다면?',
+      commentText: '쑥의 향과 땅콩의 고소함이 가득한 쑥모찌!',
+    },
+    {
+      ...productStore.products.find(p => p.name === '영양모듬떡'),
+      commentTitle: '든든한 한 끼로도 좋아요!',
+      commentText: '영양 가득한 모듬떡으로 한 끼 해결!',
+    },
+  ].filter(p => p)
+})
 </script>
 
 <style scoped>
