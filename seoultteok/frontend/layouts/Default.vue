@@ -3,8 +3,9 @@
       <Header />
       <Gnb />
       <Banner v-if="route.path === '/'" />
-      <slot />
+      <ProductSilder v-if="route.path === '/'"/>
       <IntroParallax v-if="route.path === '/'" />
+      <NuxtPage />
       <Footer />
     </div>
   </template>
@@ -14,6 +15,7 @@
   import Gnb from '~/components/Gnb.vue'
   import Footer from '~/components/Footer.vue'
   import Banner from '~/components/Banner.vue'
+  import ProductSilder from '~/components/ProductSilder.vue'
 
   const route = useRoute();
   </script>
