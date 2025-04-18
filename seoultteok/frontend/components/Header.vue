@@ -1,18 +1,23 @@
 <template>
   <header class="header">
     <div class="container">
-      <!-- 로고 및 사이트명 -->
       <NuxtLink to="/" class="logo-box">
-        <img src="/images/logo.png" alt="서울떡집 로고" class="logo-img" />
+        <img src="/images/logo.png" class="logo-img" />
         <span class="site-name">서울떡집</span>
       </NuxtLink>
 
-      <!-- 검색창 + 메뉴 -->
       <div class="menu-box">
         <input type="text" placeholder="떡 검색하기..." class="search-input" />
         <nav class="top-menu">
-          <NuxtLink to="/login">로그인</NuxtLink>
-          <NuxtLink to="/signup">회원가입</NuxtLink>
+          <template v-if="userStore.token">
+            <span>{{ userStore.userEmail }}님</span>
+            <button @click="logout" class="logout-btn">로그아웃</button>
+            <!-- 로그아웃 버튼도 추가 가능 -->
+          </template>
+          <template v-else>
+            <NuxtLink to="/login">로그인</NuxtLink>
+            <NuxtLink to="/signup">회원가입</NuxtLink>
+          </template>
           <NuxtLink to="/cart">장바구니</NuxtLink>
           <NuxtLink to="/support">고객센터</NuxtLink>
         </nav>
@@ -20,6 +25,28 @@
     </div>
   </header>
 </template>
+
+<script setup>
+import { onMounted } from 'vue'
+import { useUserStore } from '~/stores/user'
+import { useRouter } from 'vue-router'
+
+const userStore = useUserStore()
+const router = useRouter()
+onMounted(() => {
+  userStore.loadUser() // 🔐 클라이언트 환경에서만 실행됨
+  console.log("헤더에서 store token:", userStore.token)
+  console.log("헤더에서 이메일:", userStore.userEmail)
+  console.log("로컬스토리지 직접 확인:", localStorage.getItem('userEmail'))
+})
+
+
+// 로그아웃 핸들러
+const logout = () => {
+  userStore.logout()
+  router.push('/')  // 홈으로 이동 (선택사항)
+}
+</script>
 
 <style scoped>
 .header {
@@ -93,6 +120,19 @@
 }
 
 .top-menu a:hover {
+  color: #d4a373;
+}
+
+.logout-btn {
+  margin-left: 8px;
+  background: none;
+  border: none;
+  color: #7b5e57;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
   color: #d4a373;
 }
 </style>

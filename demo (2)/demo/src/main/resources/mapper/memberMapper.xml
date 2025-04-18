@@ -39,7 +39,7 @@
             NAME,
             PHONE,
             ROLE,
-            CREATED_AT
+            CREATED_AT,
              BIRTH,
             ADDRESS
         FROM MEMBER

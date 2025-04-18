@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.domain.cart.mapper.CartMapper">
+
+    <!-- 이메일로 장바구니 생성 -->
+    <insert id="insertCartByEmail">
+        INSERT INTO cart (CART_ID, MEMBER_ID, CREATED_AT)
+        VALUES (
+                   cart_seq.NEXTVAL,
+                   (SELECT MEMBER_ID FROM member WHERE EMAIL = #{email}),
+                   SYSDATE
+               )
+    </insert>
+
+    <select id="findCartIdByEmail" resultType="long">
+        SELECT CART_ID
+        FROM (
+                 SELECT CART_ID
+                 FROM cart
+                 WHERE MEMBER_ID = (SELECT MEMBER_ID FROM member WHERE EMAIL = #{email})
+                 ORDER BY CREATED_AT DESC
+             )
+        WHERE ROWNUM = 1
+    </select>
+
+    <insert id="insertCartItem">
+        INSERT INTO cart_item (CART_ITEM_ID, CART_ID, PRODUCT_ID, QUANTITY)
+        VALUES (cart_item_seq.NEXTVAL, #{cartId}, #{productId}, #{quantity})
+    </insert>
+
+    <select id="findLastInsertedCartItemId" resultType="long">
+        SELECT cart_item_seq.CURRVAL FROM dual
+    </select>
+
+    <select id="findCartItemsByEmail" resultType="com.example.demo.domain.cart.dto.CartItemDTO">
+        SELECT
+            ci.CART_ITEM_ID AS cartItemId,
+            ci.CART_ID AS cartId,
+            ci.PRODUCT_ID AS productId,
+            ci.QUANTITY AS quantity,
+            p.NAME AS name,
+            p.IMAGE_URL AS image,
+            p.RETAIL_PRICE AS price
+        FROM cart_item ci
+                 JOIN cart c ON ci.CART_ID = c.CART_ID
+                 JOIN member m ON c.MEMBER_ID = m.MEMBER_ID
+                 JOIN product p ON ci.PRODUCT_ID = p.PRODUCT_ID
+        WHERE m.EMAIL = #{email}
+    </select>
+
+    <select id="findCartIdOnlyByEmail" resultType="long">
+        SELECT CART_ID
+        FROM (
+                 SELECT CART_ID
+                 FROM cart
+                 WHERE MEMBER_ID = (SELECT MEMBER_ID FROM member WHERE EMAIL = #{email})
+                 ORDER BY CREATED_AT DESC
+             )
+        WHERE ROWNUM = 1
+    </select>
+
+
+    <update id="updateCartItemQuantity">
+        UPDATE cart_item
+        SET quantity = #{quantity}
+        WHERE cart_item_id = #{cartItemId}
+    </update>
+
+    <delete id="deleteCartItem" parameterType="long">
+        DELETE FROM cart_item WHERE CART_ITEM_ID = #{cartItemId}
+    </delete>
+
+</mapper>

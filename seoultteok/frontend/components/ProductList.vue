@@ -5,7 +5,7 @@
       <div class="card-body">
         <h3>{{ product.name }}</h3>
         <p>{{ product.retailPrice.toLocaleString() }}원</p>
-        <button @click="addToCart(product)">장바구니</button>
+        <button @click="addToCart(product)">담기</button>
       </div>
     </div>
   </div>
@@ -15,11 +15,12 @@
 import { useProductStore } from '~/stores/products'
 import { useCartStore } from '~/stores/cart'
 import { computed, onMounted } from 'vue'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps({
   filterCategory: [String, Array]
 })
-
+const toast = useToast()
 const productStore = useProductStore()
 const cartStore = useCartStore()
 
@@ -44,6 +45,13 @@ const filteredProducts = computed(() => {
 function addToCart(product) {
   
   cartStore.addToCart(product)
+
+  toast.success(`🛒 ${product.name} 이(가) 장바구니에 추가되었습니다!`, {
+  timeout: 2000,
+  position: 'top-center',
+  hideProgressBar: false,
+  closeButton: false
+})
   
 }
 </script>
@@ -68,5 +76,21 @@ function addToCart(product) {
 }
 .card-body {
   padding: 16px;
+}
+button {
+  background-color: #d9905c;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 8px;
+}
+
+button:hover {
+  background-color: #c87f4f;
 }
 </style>
