@@ -84,9 +84,9 @@
   const confirmPassword = ref('')
   
   const agreements = ref([
-    { label: '(필수) 이용약관 동의', checked: false, content: '...' },
-    { label: '(필수) 개인정보 수집 및 이용 동의', checked: false, content: '...' },
-    { label: '(선택) 마케팅 활용 동의', checked: false, content: '...' }
+    { label: '(필수) 이용약관 동의', checked: false, content: '서비스 이용과 관련하여 회사가 정한 모든 정책 및 운영규칙을 준수할 것을 동의합니다.' },
+    { label: '(필수) 개인정보 수집 및 이용 동의', checked: false, content: '회원가입, 주문처리 및 고객응대를 위해 이름, 이메일, 연락처 등의 개인정보를 수집하며, 수집된 정보는 회원 탈퇴 시까지 보관됩니다.' },
+    { label: '(선택) 마케팅 활용 동의', checked: false, content: '이벤트, 할인 쿠폰, 신상품 소식을 이메일 및 문자로 받아보는 것에 동의합니다. 언제든지 수신을 거부할 수 있습니다.' }
   ])
   const agreeAll = ref(false)
   

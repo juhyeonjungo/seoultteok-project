@@ -68,6 +68,11 @@ function addToCart(product) {
   border-radius: 14px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  transition: all 0.3s ease; /* ✅ 부드러운 전환 */
+}
+.card:hover {
+  transform: translateY(-5px) scale(1.02); /* ✅ 살짝 떠오름 + 확대 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* ✅ 그림자 강조 */
 }
 .card-img {
   width: 100%;

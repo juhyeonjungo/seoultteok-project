@@ -25,17 +25,28 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ✅ 토큰 유효성 검사 및 이메일 추출
     public String validateTokenAndGetEmail(String token) {
         try {
+            System.out.println("🔑 검증 중인 토큰: " + token);  // 디버깅용 로그 추가
+
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token); // 👉 여기서 만료되었으면 예외 터짐
 
-            return claims.getBody().getSubject();
+            String email = claims.getBody().getSubject();
+            Date expiration = claims.getBody().getExpiration();
+            System.out.println("✅ 유효한 토큰입니다. 사용자 이메일: " + email);
+            System.out.println("⏳ 만료 시각: " + expiration);
+
+            return email;
+        } catch (ExpiredJwtException e) {
+            System.out.println("❌ 토큰이 만료되었습니다. → 만료시각: " + e.getClaims().getExpiration());
         } catch (JwtException | IllegalArgumentException e) {
-            return null;
+            System.out.println("❌ JWT 오류 발생: " + e.getClass().getSimpleName() + " - " + e.getMessage());
         }
+
+        return null;
     }
+
 }

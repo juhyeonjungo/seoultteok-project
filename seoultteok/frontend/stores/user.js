@@ -28,11 +28,28 @@ export const useUserStore = defineStore('user', {
     },
 
     loadUser() {
-      this.token = localStorage.getItem('token')
-      this.userEmail = localStorage.getItem('userEmail')
-      if (!this.userEmail) {
-        this.token = null  
-        localStorage.removeItem('token')
+      const token = localStorage.getItem('token')
+      const email = localStorage.getItem('userEmail')
+    
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]))  // 가운데 부분 디코딩
+          const now = Math.floor(Date.now() / 1000)              // 초 단위 현재시간
+    
+          if (payload.exp < now) {
+            // 🔥 토큰 만료됨
+            this.logout()
+            return
+          }
+    
+          // ✅ 유효한 경우에만 상태 복구
+          this.token = token
+          this.userEmail = email
+        } catch (e) {
+          console.error("세션 만료 했다이:", e)
+          alert("🔒 세션이 만료되어 자동 로그아웃 되었습니다.")
+          this.logout()
+        }
       }
     },
 

@@ -33,10 +33,10 @@ public class CartServiceImpl implements CartService {
 
         if (items.isEmpty()) {
             cartId = cartMapper.findCartIdOnlyByEmail(email); // 아이템이 없더라도 cartId만 조회
-            System.out.println("조인이안됐습니다");
+            System.out.println("조인이안됐습니다");         // 상품 선택 안했을 경우  cart 테이블에 있는 cartId 컬럼만 추출
         } else {
             cartId = items.get(0).getCartId();
-            System.out.println("조인이됐습니다");
+            System.out.println("조인이됐습니다");          // 상품 선택 했을 경우    cart 테이블과 cart_item 테이블 조인 후 cartId 컬럼 추출
         }
 
         return new CartResponse(cartId, items);

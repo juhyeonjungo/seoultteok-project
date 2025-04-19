@@ -16,8 +16,13 @@
   import Footer from '~/components/Footer.vue'
   import Banner from '~/components/Banner.vue'
   import ProductSilder from '~/components/ProductSilder.vue'
+  import { useUserStore } from '~/stores/user'
+
+
 
   const route = useRoute();
+
+ 
   </script>
   
   <style scoped>

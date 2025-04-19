@@ -17,10 +17,8 @@
           >
             <img :src="product.imageUrl" :alt="product.name" class="card-img" />
             <div class="card-body">
-              <button class="add-btn" @click="cartStore.addToCart(product)">담기</button>
               <h3 class="name">{{ product.name }}</h3>
               <p class="price">{{ product.retailPrice.toLocaleString() }}원</p>
-            
             </div>
           </div>
         </div>
@@ -33,30 +31,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useProductStore } from '@/stores/products'
-import { useCartStore } from '@/stores/cart'
-import { onMounted } from 'vue'
+
 const productStore = useProductStore()
 const sliderRef = ref(null)
-const cartStore = useCartStore()
 
 onMounted(async () => {
   await productStore.loadProducts()
 })
 
 const scrollLeft = () => {
-  sliderRef.value.scrollBy({
-    left: -320, // 왼쪽으로 이동
-    behavior: 'smooth',
-  })
+  sliderRef.value.scrollBy({ left: -320, behavior: 'smooth' })
 }
 
 const scrollRight = () => {
-  sliderRef.value.scrollBy({
-    left: 320, // 오른쪽으로 이동
-    behavior: 'smooth',
-  })
+  sliderRef.value.scrollBy({ left: 320, behavior: 'smooth' })
 }
 </script>
 
@@ -77,7 +67,6 @@ const scrollRight = () => {
   text-align: center;
   color: #3b2f2f;
 }
-
 .title .brand {
   color: #b08968;
 }
@@ -97,10 +86,10 @@ const scrollRight = () => {
   scroll-behavior: smooth;
   gap: 24px;
   padding-bottom: 10px;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 .slider::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
+  display: none;
 }
 
 .card {
@@ -110,6 +99,7 @@ const scrollRight = () => {
   border-radius: 14px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
+  text-align: center;
 }
 .card:hover {
   transform: translateY(-4px);
@@ -153,18 +143,5 @@ const scrollRight = () => {
 }
 .arrow-btn.right {
   right: -12px;
-}
-.add-btn {
-  margin-top: auto;
-  background-color: #d38852;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-weight: bold;
-  transition: 0.2s;
-}
-.add-btn:hover {
-  background-color: #bb6e3d;
 }
 </style>

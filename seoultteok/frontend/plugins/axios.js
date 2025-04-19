@@ -17,6 +17,28 @@ export default defineNuxtPlugin(() => {
     return Promise.reject(error)
   })
 
+  // 응답에서 토큰 만료 감지 
+  instance.interceptors.response.use(
+    res => res,
+    err => {
+      const code = err.response?.status
+      if (code === 401) {
+        alert("🔐 로그인 필요 또는 토큰 만료됨")
+  
+        // 👉 토큰 초기화
+        const userStore = useUserStore()
+        userStore.logout()  // <-- 이거 꼭 해줘야 Header에서도 로그아웃됨
+  
+        window.location.href = "/login"
+      }
+
+      if (code === 403) {
+        alert("⛔ 권한이 없습니다 (접근 불가)")
+      }
+      return Promise.reject(err)
+    }
+  )
+
   return {
     provide: {
       axios: instance
