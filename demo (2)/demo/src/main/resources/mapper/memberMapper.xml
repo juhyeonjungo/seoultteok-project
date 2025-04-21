@@ -31,7 +31,7 @@
     </insert>
 
     <!-- 로그인용: 이메일로 회원 조회 -->
-    <select id="findByEmail" parameterType="string" resultType="com.example.demo.domain.member.dto.Member">
+    <select id="findByEmail"  resultType="com.example.demo.domain.member.dto.Member">
         SELECT
             MEMBER_ID,
             EMAIL,
@@ -40,10 +40,11 @@
             PHONE,
             ROLE,
             CREATED_AT,
-             BIRTH,
+            BIRTH,
             ADDRESS
         FROM MEMBER
         WHERE EMAIL = #{email}
     </select>
+
 
 </mapper>

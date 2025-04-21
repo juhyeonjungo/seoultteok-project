@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.domain.member.mapper.MemberMapper;
 import com.example.demo.jwt.JwtAuthenticationFilter;
 import com.example.demo.jwt.JwtAuthorizationFilter;
 import com.example.demo.jwt.JwtUtil;
@@ -26,6 +27,7 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
+    private final MemberMapper memberMapper; // ⬅ 추가!!
 
     // ✅ AuthenticationManager 빈 등록
     @Bean

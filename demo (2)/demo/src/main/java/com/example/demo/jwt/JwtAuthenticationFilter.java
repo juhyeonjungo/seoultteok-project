@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult)
             throws IOException, ServletException {
-         //Authentication authResult :인증(로그인)이 성공한 사용자에 대한 인증된 정보 객체
+        //Authentication authResult :인증(로그인)이 성공한 사용자에 대한 인증된 정보 객체
         String email = authResult.getName(); // email 가져오기
         String token = jwtUtil.generateToken(email); // 토큰 발급
 

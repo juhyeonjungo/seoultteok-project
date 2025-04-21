@@ -1,7 +1,7 @@
 <template>
   <section class="best-section">
     <div class="container">
-      <h2 class="title"><span class="brand">서울떡집</span> <span class="highlight">베스트</span></h2>
+      <h2 class="title"><span class="brand">서울떡집</span> <span class="highlight">Best</span></h2>
       <div class="grid">
         <div
           v-for="product in bestProducts"

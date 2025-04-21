@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.domain.order.mapper.OrderMapper">
+
+    <insert id="insertOrder">
+        INSERT INTO ORDERS (
+            ORDER_ID, MEMBER_ID, ORDER_DATE,
+            TOTAL_PRICE, STATUS,
+            RECEIVER_NAME, RECEIVER_ADDRESS,
+            RECEIVER_PHONE, MEMO
+        ) VALUES (
+                     ORDER_SEQ.NEXTVAL,
+                     #{memberId},
+                     SYSDATE,
+                     #{totalPrice},
+                     '주문완료',
+                     #{receiverName},
+                     #{receiverAddress},
+                     #{receiverPhone},
+                     #{memo}
+                 )
+    </insert>
+
+    <select id="getLastOrderId" resultType="long">
+        SELECT ORDER_SEQ.CURRVAL FROM dual
+    </select>
+
+    <insert id="insertOrderItem">
+        INSERT INTO ORDER_ITEM (
+            ORDER_ITEM_ID, ORDER_ID, PRODUCT_ID, QUANTITY, PRICE
+        ) VALUES (
+                     ORDER_ITEM_SEQ.NEXTVAL,
+                     #{orderId},
+                     #{productId},
+                     #{quantity},
+                     #{price}
+                 )
+    </insert>
+
+</mapper>

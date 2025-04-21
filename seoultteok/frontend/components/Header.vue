@@ -12,6 +12,7 @@
           <template v-if="userStore.token">
             <span>{{ userStore.userEmail }}님</span>
             <button @click="logout" class="logout-btn">로그아웃</button>
+            <NuxtLink to="/mypage">마이페이지</NuxtLink>
             <!-- 로그아웃 버튼도 추가 가능 -->
           </template>
           <template v-else>

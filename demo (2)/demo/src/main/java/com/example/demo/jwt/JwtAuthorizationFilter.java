@@ -29,10 +29,10 @@ public class JwtAuthorizationFilter extends GenericFilter {
             if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
                 String token = authHeader.substring(7); // "Bearer " 제외
 
-                // 여기서 유효성 검사 + 만료 체크
+                // 유효성 검사 + 만료 체크
                 String email = jwtUtil.validateTokenAndGetEmail(token);
+                System.out.println("📌 validate 결과 이메일: " + email);
 
-                // 정상인 경우 SecurityContext에 등록
                 if (email != null) {
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
@@ -41,16 +41,17 @@ public class JwtAuthorizationFilter extends GenericFilter {
                 }
             }
 
-            chain.doFilter(request, response); // 다음 필터로
+            chain.doFilter(request, response);
 
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
-            // 토큰 만료인 경우
-            httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+            httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpRes.getWriter().write("토큰이 만료되었습니다.");
-        } catch (Exception e) {
-            // 그 외 에러
+        } catch (io.jsonwebtoken.JwtException e) {
             httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpRes.getWriter().write("유효하지 않은 토큰입니다.");
+        } catch (Exception e) {
+            // ⚠️ 핵심: 나머지 예외는 Spring에 던져서 500 오류 나오게 함
+            throw e;
         }
     }
 }

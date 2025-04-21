@@ -37,10 +37,11 @@ import { useCartStore } from '~/stores/cart'
 import { computed } from 'vue'
 import { onMounted } from 'vue'
 import { useUserStore } from '~/stores/user'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const userStore = useUserStore()
 const cartStore = useCartStore()
-
 const cartItems = computed(() => cartStore.items)
 const totalPrice = computed(() => cartStore.totalPrice)
 const totalCount = computed(() => cartStore.totalCount)
@@ -62,7 +63,7 @@ function remove(cartItemId) {
 }
 
 function checkout() {
-  alert('🚨 결제기능은 아직 미구현입니다!')
+  router.push('/order')
 }
 </script>
 

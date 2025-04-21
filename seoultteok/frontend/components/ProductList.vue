@@ -16,6 +16,7 @@ import { useProductStore } from '~/stores/products'
 import { useCartStore } from '~/stores/cart'
 import { computed, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
+import { useUserStore } from '~/stores/user'
 
 const props = defineProps({
   filterCategory: [String, Array]
@@ -23,6 +24,7 @@ const props = defineProps({
 const toast = useToast()
 const productStore = useProductStore()
 const cartStore = useCartStore()
+const userStore = useUserStore()
 
 onMounted(async () => {
   if (productStore.products.length === 0) {
@@ -43,16 +45,18 @@ const filteredProducts = computed(() => {
 })
 
 function addToCart(product) {
-  
+  const userStore = useUserStore()
+
   cartStore.addToCart(product)
 
-  toast.success(`🛒 ${product.name} 이(가) 장바구니에 추가되었습니다!`, {
-  timeout: 2000,
-  position: 'top-center',
-  hideProgressBar: false,
-  closeButton: false
-})
-  
+  if (userStore.token) {
+    toast.success(`🛒 ${product.name} 이(가) 장바구니에 추가되었습니다!`, {
+      timeout: 2000,
+      position: 'top-center',
+      hideProgressBar: false,
+      closeButton: false
+    })
+  }
 }
 </script>
 
