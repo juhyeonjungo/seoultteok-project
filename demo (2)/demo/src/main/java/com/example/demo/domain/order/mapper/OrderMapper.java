@@ -1,7 +1,10 @@
 package com.example.demo.domain.order.mapper;
 
+import com.example.demo.domain.order.dto.OrderResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface OrderMapper {
@@ -23,4 +26,6 @@ public interface OrderMapper {
             @Param("quantity") int quantity,
             @Param("price") int price
     );
+
+    List<OrderResponse> findOrdersByEmail(String email);
 }

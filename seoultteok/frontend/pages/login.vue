@@ -1,84 +1,79 @@
 <template>
-    <div class="login-wrapper">
-      <h2>로그인</h2>
-  
-      <div class="form-group">
-        <label>이메일</label>
-        <input v-model="email" type="email" placeholder="이메일 입력" />
-      </div>
-  
-      <div class="form-group">
-        <label>비밀번호</label>
-        <input v-model="password" type="password" placeholder="비밀번호 입력" />
-      </div>
-  
-      <button @click="submit">로그인</button>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useUserStore } from '@/stores/user'
-  import { useToast } from 'vue-toastification'
-  import { useCartStore } from '@/stores/cart'
-  
-  const email = ref('')
-  const password = ref('')
-  const router = useRouter()
-  const userStore = useUserStore()
-  const toast = useToast()
-  const cartStore = useCartStore()
+  <v-container class="d-flex justify-center align-center" style="height: 100vh;">
+    <v-card
+      class="pa-8"
+      max-width="500"
+      min-width="400"
+      elevation="10"
+    >
+      <v-card-title class="text-h5 font-weight-bold mb-6 justify-center">
+        🔐 로그인
+      </v-card-title>
 
-  async function submit() {
+      <v-form @submit.prevent="submit">
+        <v-text-field
+          v-model="email"
+          label="이메일"
+          type="email"
+          placeholder="이메일을 입력하세요"
+          prepend-inner-icon="mdi-email"
+          density="comfortable"
+          class="mb-4"
+          hide-details
+        />
+
+        <v-text-field
+          v-model="password"
+          label="비밀번호"
+          type="password"
+          placeholder="비밀번호를 입력하세요"
+          prepend-inner-icon="mdi-lock"
+          density="comfortable"
+          hide-details
+        />
+
+        <v-btn
+          type="submit"
+          color="brown-darken-2"
+          variant="elevated"
+          size="large"
+          block
+          class="mt-6"
+        >
+          로그인
+        </v-btn>
+      </v-form>
+    </v-card>
+  </v-container>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+import { useToast } from 'vue-toastification'
+import { useCartStore } from '@/stores/cart'
+
+const email = ref('')
+const password = ref('')
+const router = useRouter()
+const userStore = useUserStore()
+const toast = useToast()
+const cartStore = useCartStore()
+
+async function submit() {
   try {
     await userStore.login({ email: email.value, password: password.value })
 
     await cartStore.fetchCart(userStore.userEmail)
-     console.log("장바구니 있는지 확인했니?");
-   
-     
-    // 🛒 장바구니가 없을 경우 생성
     if (!cartStore.cartId) {
       await cartStore.initCart(userStore.userEmail)
-      console.log("장바구니 만들러갈게영");
     }
 
-    toast.success('✅ 로그인 성공했습니다!')
+    toast.success('✅ 로그인 성공!')
     router.push('/')
   } catch (e) {
-    toast.error('❌ 로그인 실패: 이메일 또는 비밀번호를 확인하세요')
-    console.error(e)
+    toast.error('❌ 로그인 실패: 이메일 또는 비밀번호 확인')
   }
 }
-
-  </script>
-  
-  <style scoped>
-  .login-wrapper {
-    max-width: 400px;
-    margin: auto;
-    padding: 30px;
-    background: #fff;
-  }
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 14px;
-  }
-  input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  button {
-    background: #623b2a;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  </style>
-  
+</script>

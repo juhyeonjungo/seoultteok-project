@@ -1,53 +1,68 @@
 <template>
-    <div class="mypage">
-      <h1>주문 내역</h1>
-      <table v-if="orders.length">
-        <thead>
-          <tr>
-            <th>주문번호</th>
-            <th>날짜</th>
-            <th>총금액</th>
-            <th>상태</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="order in orders" :key="order.orderId">
-            <td>{{ order.orderId }}</td>
-            <td>{{ order.orderDate }}</td>
-            <td>{{ order.totalPrice }}원</td>
-            <td>{{ order.status }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <p v-else>주문 내역이 없습니다.</p>
-    </div>
+    <v-container class="py-10">
+      <h1 class="text-h5 font-weight-bold mb-6">📦 주문 내역</h1>
+  
+      <v-expansion-panels>
+        <v-expansion-panel
+          v-for="order in orders"
+          :key="order.orderId"
+          elevation="1"
+        >
+          <!-- 주문 제목 줄 -->
+          <v-expansion-panel-title class="bg-brown-50 font-weight-bold">
+            <v-row class="w-100">
+              <v-col cols="2">#{{ order.orderId }}</v-col>
+              <v-col cols="4">{{ order.orderDate }}</v-col>
+              <v-col cols="3">{{ order.totalPrice.toLocaleString() }}원</v-col>
+              <v-col cols="3">{{ order.status }}</v-col>
+            </v-row>
+          </v-expansion-panel-title>
+  
+          <!-- 펼쳐졌을 때 나오는 상세 상품 내역 -->
+          <v-expansion-panel-text class="bg-grey-lighten-5">
+            <v-row
+              v-for="item in order.items"
+              :key="item.productId"
+              class="mb-4 px-2"
+            >
+              <v-col cols="2">
+                <v-img
+                  :src="item.imageUrl"
+                  height="80"
+                  width="80"
+                  cover
+                  class="rounded"
+                />
+              </v-col>
+              <v-col cols="6">
+                <div class="font-weight-medium">{{ item.name }}</div>
+                <div>단가: {{ item.price.toLocaleString() }}원</div>
+                <div>수량: {{ item.quantity }}개</div>
+              </v-col>
+              <v-col cols="4" class="text-right">
+                <div class="font-weight-bold">
+                  합계: {{ (item.price * item.quantity).toLocaleString() }}원
+                </div>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-container>
   </template>
   
   <script setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted } from 'vue'
   import { useUserStore } from '~/stores/user'
-  import { useNuxtApp } from '#app'
+  import { useOrderStore } from '~/stores/order'
+  import { storeToRefs } from 'pinia'
   
-  const { $axios } = useNuxtApp()
   const userStore = useUserStore()
-  const orders = ref([])
+  const orderStore = useOrderStore()
+  const { orders } = storeToRefs(orderStore)
   
-  onMounted(async () => {
-    const res = await $axios.get(`/orders?email=${userStore.userEmail}`)
-    orders.value = res.data
+  onMounted(() => {
+    orderStore.fetchOrders(userStore.userEmail)
   })
   </script>
   
-  <style scoped>
-  .mypage {
-    padding: 40px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-  }
-  </style>

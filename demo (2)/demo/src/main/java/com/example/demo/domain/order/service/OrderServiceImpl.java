@@ -4,9 +4,12 @@ import com.example.demo.domain.member.dto.Member;
 import com.example.demo.domain.member.mapper.MemberMapper;
 import com.example.demo.domain.order.dto.OrderItemRequest;
 import com.example.demo.domain.order.dto.OrderRequest;
+import com.example.demo.domain.order.dto.OrderResponse;
 import com.example.demo.domain.order.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,10 @@ public class OrderServiceImpl implements OrderService {
                     item.getPrice()
             );
         }
+    }
 
+    @Override
+    public List<OrderResponse> getOrdersByEmail(String email) {
+        return orderMapper.findOrdersByEmail(email);
     }
 }

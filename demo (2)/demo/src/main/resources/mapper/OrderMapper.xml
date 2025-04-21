@@ -5,6 +5,21 @@
 
 <mapper namespace="com.example.demo.domain.order.mapper.OrderMapper">
 
+    <resultMap id="orderWithItemsResultMap" type="com.example.demo.domain.order.dto.OrderResponse">
+        <id property="orderId" column="ORDER_ID" />
+        <result property="orderDate" column="ORDER_DATE" />
+        <result property="totalPrice" column="TOTAL_PRICE" />
+        <result property="status" column="STATUS" />
+
+        <collection property="items" ofType="com.example.demo.domain.order.dto.OrderItemInfoDTO">
+            <id property="productId" column="PRODUCT_ID" />
+            <result property="name" column="NAME" />
+            <result property="imageUrl" column="IMAGE_URL" />
+            <result property="quantity" column="QUANTITY" />
+            <result property="price" column="PRICE" />
+        </collection>
+    </resultMap>
+
     <insert id="insertOrder">
         INSERT INTO ORDERS (
             ORDER_ID, MEMBER_ID, ORDER_DATE,
@@ -40,4 +55,25 @@
                  )
     </insert>
 
+
+
+    <select id="findOrdersByEmail" resultMap="orderWithItemsResultMap">
+        SELECT
+            O.ORDER_ID,
+            TO_CHAR(O.ORDER_DATE, 'YYYY-MM-DD HH24:MI:SS') AS ORDER_DATE,
+            O.TOTAL_PRICE,
+            O.STATUS,
+
+            P.PRODUCT_ID,
+            P.NAME,
+            P.IMAGE_URL,
+            OI.QUANTITY,
+            OI.PRICE
+        FROM ORDERS O
+                 JOIN MEMBER M ON O.MEMBER_ID = M.MEMBER_ID
+                 JOIN ORDER_ITEM OI ON O.ORDER_ID = OI.ORDER_ID
+                 JOIN PRODUCT P ON OI.PRODUCT_ID = P.PRODUCT_ID
+        WHERE M.EMAIL = #{email}
+        ORDER BY O.ORDER_DATE DESC, O.ORDER_ID, P.PRODUCT_ID
+    </select>
 </mapper>

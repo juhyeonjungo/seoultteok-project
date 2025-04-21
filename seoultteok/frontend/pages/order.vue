@@ -31,14 +31,16 @@
   </template>
   
   <script setup>
+  import { ref, computed } from 'vue'
   import { useCartStore } from '~/stores/cart'
   import { useUserStore } from '~/stores/user'
+  import { useOrderStore } from '~/stores/order' // ✅ 새로 만든 스토어
   import { useToast } from 'vue-toastification'
   import { useRouter } from 'vue-router'
-  import { createOrder } from '@/api/orderapi'
   
   const cartStore = useCartStore()
   const userStore = useUserStore()
+  const orderStore = useOrderStore()
   const toast = useToast()
   const router = useRouter()
   
@@ -69,8 +71,7 @@
     }
   
     try {
-        console.log("주문페이지"+userStore.userEmail);
-      await createOrder(userStore.userEmail, orderData)
+      await orderStore.submitOrder(userStore.userEmail, orderData) // ✅ 스토어 호출
       toast.success('✅ 주문 완료!')
       cartStore.items = []
       router.push('/')
@@ -82,31 +83,59 @@
   </script>
   
   <style scoped>
-  .order-page {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-  }
-  .form-group {
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-  }
-  input,
-  textarea {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  textarea {
-    resize: none;
-  }
-  button {
-    background: #623b2a;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-  }
+ .order-page {
+  max-width: 600px;
+  margin: auto;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+input,
+textarea {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+.order-summary {
+  margin-top: 20px;
+  font-size: 16px;
+  width: 100%;
+  text-align: right;
+}
+
+button {
+  margin-top: 16px;
+  width: 100%;
+  background: #623b2a;
+  color: white;
+  padding: 12px 0;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
   </style>
   
