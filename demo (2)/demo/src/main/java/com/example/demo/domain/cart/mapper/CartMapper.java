@@ -28,4 +28,6 @@ public interface CartMapper {
     void updateCartItemQuantity(@Param("cartItemId") Long cartItemId, @Param("quantity") int quantity);
 
     void deleteCartItem(Long cartItemId);
+
+    void deleteAllCartItems(Long cartId);
 }

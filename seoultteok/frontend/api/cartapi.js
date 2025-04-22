@@ -31,3 +31,9 @@ export async function removeCartItem(cartItemId) {
   const { $axios } = useNuxtApp()
   return await $axios.delete(`/cart/items/${cartItemId}`)
 }
+
+
+export async function removeAllCartItems(cartId) {
+  const { $axios } = useNuxtApp()
+  return await $axios.delete(`/cart/${cartId}/items`)
+}

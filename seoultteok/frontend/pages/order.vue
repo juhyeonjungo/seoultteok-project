@@ -73,7 +73,9 @@
     try {
       await orderStore.submitOrder(userStore.userEmail, orderData) // ✅ 스토어 호출
       toast.success('✅ 주문 완료!')
-      cartStore.items = []
+      await cartStore.clearCart() // 실제 DB에서도 삭제
+      
+      await cartStore.initCart(userStore.userEmail)
       router.push('/')
     } catch (err) {
       console.error(err)
