@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/members/login", "/api/members/signup", "/api/products/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // 추가
                         .anyRequest().authenticated()
                 )
                 .addFilter(jwtAuthenticationFilter)

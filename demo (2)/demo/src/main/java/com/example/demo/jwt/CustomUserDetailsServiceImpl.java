@@ -15,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,11 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService{
             throw new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다.");
         }
 
-        return new User(member.getEmail(), member.getPassword(), Collections.emptyList());
+        return new User(
+                member.getEmail(),
+                member.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_" + member.getRole()))
+        );
     }
 
 

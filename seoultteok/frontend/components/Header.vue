@@ -13,6 +13,7 @@
             <span>{{ userStore.userEmail }}님</span>
             <button @click="logout" class="logout-btn">로그아웃</button>
             <NuxtLink to="/mypage">마이페이지</NuxtLink>
+            <NuxtLink v-if="isAdmin" to="/admin">관리자</NuxtLink>
             <!-- 로그아웃 버튼도 추가 가능 -->
           </template>
           <template v-else>
@@ -39,6 +40,12 @@ onMounted(() => {
   console.log("헤더에서 store token:", userStore.token)
   console.log("헤더에서 이메일:", userStore.userEmail)
   console.log("로컬스토리지 직접 확인:", localStorage.getItem('userEmail'))
+})
+
+const isAdmin = computed(() => {
+  if (!userStore.token) return false
+  const payload = JSON.parse(atob(userStore.token.split('.')[1]))
+  return payload.role === 'ADMIN'
 })
 
 

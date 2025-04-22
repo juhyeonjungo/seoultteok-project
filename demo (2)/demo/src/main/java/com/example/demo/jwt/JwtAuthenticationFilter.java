@@ -21,6 +21,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final JwtUtil jwtUtil;
 
     // 🔐 로그인 요청 처리
+    //- 클라이언트가 보낸 email, password 꺼냄
+    //- 그걸로 Authentication 객체 생성
+    //- authenticationManager.authenticate(authToken) 호출해서
+    //  👉 우리가 만든 CustomUserDetailsServiceImpl 에게 인증 맡김
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
@@ -29,7 +33,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             // JSON 형태로 요청받은 email, password 꺼내기
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, String> requestBody = objectMapper.readValue(request.getInputStream(), Map.class);
-            System.out.println("요청값: " + requestBody.get("email") + ", " + requestBody.get("password")); // ✅ 꼭 찍어봐라
+            System.out.println("요청값: " + requestBody.get("email") + ", " + requestBody.get("password"));
 
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(requestBody.get("email"), requestBody.get("password"));
@@ -45,13 +49,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     // ✅ 로그인 성공 시 실행됨
+    //- 인증 성공한 사용자 email 꺼냄
+    //- 그걸로 JWT 발급함 👉 JwtUtil.generateToken(email)
+    //- 응답 헤더/바디에 토큰 담아서 프론트로 보냄
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult)
             throws IOException, ServletException {
         //Authentication authResult :인증(로그인)이 성공한 사용자에 대한 인증된 정보 객체
         String email = authResult.getName(); // email 가져오기
-        String token = jwtUtil.generateToken(email); // 토큰 발급
+        String role = authResult.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+        String token = jwtUtil.generateToken(email,role); // 토큰 발급
 
         response.setHeader("Authorization", "Bearer " + token);
 

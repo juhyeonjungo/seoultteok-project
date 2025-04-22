@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.domain.admin.mapper.AdminProductMapper">
+
+    <!-- 전체 상품 조회 -->
+    <select id="findAllProducts" resultType="com.example.demo.domain.admin.dto.AdminProductDTO">
+        SELECT
+            PRODUCT_ID,
+            NAME,
+            RETAIL_PRICE AS retailPrice,
+            BULK_PRICE AS bulkPrice,
+            CATEGORY,
+            STOCK
+        FROM PRODUCT
+        ORDER BY PRODUCT_ID DESC
+    </select>
+
+    <!-- 상품 수정-->
+
+    <update id="updateProduct" parameterType="com.example.demo.domain.admin.dto.AdminProductDTO">
+        UPDATE PRODUCT
+        SET
+            NAME = #{name},
+            RETAIL_PRICE = #{retailPrice},
+            CATEGORY = #{category},
+            STOCK = #{stock}
+        WHERE PRODUCT_ID = #{productId}
+    </update>
+
+    <!-- 상품 삭제 -->
+    <delete id="deleteProduct">
+        DELETE FROM PRODUCT
+        WHERE PRODUCT_ID = #{productId}
+    </delete>
+
+</mapper>
