@@ -7,7 +7,7 @@
       </NuxtLink>
 
       <div class="menu-box">
-        <input type="text" placeholder="떡 검색하기..." class="search-input" />
+        
         <nav class="top-menu">
           <template v-if="userStore.token">
             <span>{{ userStore.userEmail }}님</span>
@@ -21,7 +21,7 @@
             <NuxtLink to="/signup">회원가입</NuxtLink>
           </template>
           <NuxtLink to="/cart">장바구니</NuxtLink>
-          <NuxtLink to="/support">고객센터</NuxtLink>
+          <NuxtLink to="/support">소개 글</NuxtLink>
         </nav>
       </div>
     </div>
@@ -107,13 +107,7 @@ const logout = () => {
   gap: 24px;
 }
 
-.search-input {
-  padding: 6px 12px;
-  border: 1px solid #d0b49f;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-}
+
 
 .top-menu {
   display: flex;

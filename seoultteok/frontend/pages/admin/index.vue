@@ -1,8 +1,7 @@
 <!-- /pages/admin/index.vue -->
 <template>
     <div class="admin-page">
-      <h1> 관리자 전용 마이페이지</h1>
-      <p>이곳에서 상품 등록, 수정, 삭제 기능 등을 관리할 수 있습니다.</p>
+      <h1> 서울떡집 관리자 공간입니다.</h1>
       <!-- 예시: 관리자용 기능 나열 -->
       <ul>
         <li><NuxtLink to="/admin/products">상품 목록 관리</NuxtLink></li>
