@@ -11,4 +11,5 @@ public interface AdminProductMapper {
     List<AdminProductDTO> findAllProducts();
     void deleteProduct(Long productId);
     void updateProduct(AdminProductDTO dto);
+    void insertProduct(AdminProductDTO dto);
 }

@@ -30,4 +30,9 @@ public class AdminProductController {
         adminProductService.updateProduct(productId, dto);
         return ResponseEntity.ok().build();
     }
+    @PostMapping("/add")
+    public ResponseEntity<Void> addProduct(@RequestBody AdminProductDTO dto) {
+        adminProductService.addProduct(dto);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.domain.admin.mapper.AdminSalesMapper">
+
+    <!-- 1. 총 매출액 -->
+    <select id="getTotalRevenue" resultType="int">
+        SELECT SUM(OI.PRICE * OI.QUANTITY)
+        FROM ORDER_ITEM OI
+        JOIN ORDERS O ON OI.ORDER_ID = O.ORDER_ID
+        WHERE
+        <choose>
+            <when test="period == 'daily'">
+                TRUNC(O.ORDER_DATE) >= TRUNC(SYSDATE - 7)
+            </when>
+            <when test="period == 'monthly'">
+                TO_CHAR(O.ORDER_DATE, 'YYYYMM') >= TO_CHAR(ADD_MONTHS(SYSDATE, -3), 'YYYYMM')
+            </when>
+            <otherwise>
+                TO_CHAR(O.ORDER_DATE, 'YYYY') >= TO_CHAR(ADD_MONTHS(SYSDATE, -24), 'YYYY')
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 2. 기간별 라벨 -->
+    <select id="getPeriodLabels" resultType="string">
+        SELECT DISTINCT
+        <choose>
+            <when test="period == 'daily'">
+                TO_CHAR(O.ORDER_DATE, 'MM/DD')
+            </when>
+            <when test="period == 'monthly'">
+                TO_CHAR(O.ORDER_DATE, 'YYYY/MM')
+            </when>
+            <otherwise>
+                TO_CHAR(O.ORDER_DATE, 'YYYY')
+            </otherwise>
+        </choose> AS LABEL
+        FROM ORDERS O
+        ORDER BY LABEL
+    </select>
+
+    <!-- 3. 기간별 매출 합계 -->
+    <select id="getPeriodValues" resultType="int">
+        SELECT SUM(OI.PRICE * OI.QUANTITY)
+        FROM ORDER_ITEM OI
+        JOIN ORDERS O ON OI.ORDER_ID = O.ORDER_ID
+        GROUP BY
+        <choose>
+            <when test="period == 'daily'">
+                TO_CHAR(O.ORDER_DATE, 'MM/DD')
+            </when>
+            <when test="period == 'monthly'">
+                TO_CHAR(O.ORDER_DATE, 'YYYY/MM')TO_CHAR(O.ORDER_DATE, 'YYYY/MM')
+            </when>
+            <otherwise>
+                TO_CHAR(O.ORDER_DATE, 'YYYY')
+            </otherwise>
+        </choose>
+        ORDER BY
+        <choose>
+            <when test="period == 'daily'">
+                TO_CHAR(O.ORDER_DATE, 'MM/DD')
+            </when>
+            <when test="period == 'monthly'">
+                TO_CHAR(O.ORDER_DATE, 'YYYY/MM')
+            </when>
+            <otherwise>
+                TO_CHAR(O.ORDER_DATE, 'YYYY')
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 4. 상품별 이름 (상위 5개) -->
+    <select id="getTopProductNames" resultType="string">
+        SELECT NAME FROM (
+        SELECT P.NAME, SUM(OI.PRICE * OI.QUANTITY) AS TOTAL
+        FROM ORDER_ITEM OI
+        JOIN PRODUCT P ON OI.PRODUCT_ID = P.PRODUCT_ID
+        GROUP BY P.NAME
+        ORDER BY TOTAL DESC
+        )
+        WHERE ROWNUM &lt;= 5
+    </select>
+
+    <select id="getTopProductSales" resultType="int">
+        SELECT TOTAL FROM (
+        SELECT SUM(OI.PRICE * OI.QUANTITY) AS TOTAL
+        FROM ORDER_ITEM OI
+        JOIN PRODUCT P ON OI.PRODUCT_ID = P.PRODUCT_ID
+        GROUP BY P.NAME
+        ORDER BY TOTAL DESC
+        )
+        WHERE ROWNUM &lt;= 5
+    </select>
+
+    <!-- 6. 카테고리 이름 -->
+    <select id="getCategoryNames" resultType="string">
+        SELECT P.CATEGORY
+        FROM ORDER_ITEM OI
+                 JOIN PRODUCT P ON OI.PRODUCT_ID = P.PRODUCT_ID
+        GROUP BY P.CATEGORY
+    </select>
+
+    <!-- 7. 카테고리 매출 -->
+    <select id="getCategorySales" resultType="int">
+        SELECT SUM(OI.PRICE * OI.QUANTITY)
+        FROM ORDER_ITEM OI
+                 JOIN PRODUCT P ON OI.PRODUCT_ID = P.PRODUCT_ID
+        GROUP BY P.CATEGORY
+    </select>
+
+</mapper>

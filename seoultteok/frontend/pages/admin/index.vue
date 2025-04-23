@@ -7,6 +7,7 @@
       <ul>
         <li><NuxtLink to="/admin/products">상품 목록 관리</NuxtLink></li>
         <li><NuxtLink to="/admin/orders">주문 전체 관리</NuxtLink></li>
+        <li><NuxtLink to="/admin/sales">매출 관리</NuxtLink></li>
       </ul>
     </div>
   </template>

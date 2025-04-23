@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { fetchAllProductsAPI, deleteProductAPI,updateProductAPI} from '@/api/productadminapi'
+import { fetchAllProductsAPI, deleteProductAPI,updateProductAPI, addProductAPI} from '@/api/productadminapi'
 
 export const useProductAdminStore = defineStore('productadmin', {
   state: () => ({
@@ -17,6 +17,10 @@ export const useProductAdminStore = defineStore('productadmin', {
 
     async deleteProduct(productId) {
       await deleteProductAPI(productId)
+    },
+
+    async addProduct(productData) {
+      await addProductAPI(productData)
     }
   }
 })

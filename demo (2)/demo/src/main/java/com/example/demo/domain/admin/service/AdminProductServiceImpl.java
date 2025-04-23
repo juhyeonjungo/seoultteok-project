@@ -28,4 +28,10 @@ public class AdminProductServiceImpl implements AdminProductService {
         dto.setProductId(productId); // 혹시 모르니 ID 세팅
         adminProductMapper.updateProduct(dto);
     }
+
+    @Override
+    public void addProduct(AdminProductDTO dto) {
+        adminProductMapper.insertProduct(dto);
+    }
+
 }

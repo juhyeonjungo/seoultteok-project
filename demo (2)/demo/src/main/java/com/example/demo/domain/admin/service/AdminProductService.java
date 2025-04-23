@@ -8,4 +8,7 @@ public interface AdminProductService {
     List<AdminProductDTO> getAllProducts();
     void deleteProduct(Long productId);
     void updateProduct(Long productId, AdminProductDTO dto);
+    void addProduct(AdminProductDTO dto);
+
+
 }

@@ -36,4 +36,29 @@
         WHERE PRODUCT_ID = #{productId}
     </delete>
 
+    <!-- 상품 추가 -->
+    <insert id="insertProduct">
+        INSERT INTO PRODUCT (
+            PRODUCT_ID,
+            NAME,
+            DESCRIPTION,
+            STOCK,
+            IMAGE_URL,
+            CATEGORY,
+            CREATED_AT,
+            RETAIL_PRICE,
+            BULK_PRICE
+        ) VALUES (
+                     PRODUCT_SEQ.NEXTVAL,
+                     #{name},
+                     #{description},
+                     #{stock},
+                     #{imageUrl},
+                     #{category},
+                     SYSDATE,
+                     #{retailPrice},
+                     #{bulkPrice}
+                 )
+    </insert>
+
 </mapper>

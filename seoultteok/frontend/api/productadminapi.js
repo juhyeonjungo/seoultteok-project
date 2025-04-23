@@ -15,3 +15,8 @@ export async function updateProductAPI(productData) {
     const { $axios } = useNuxtApp()
     await $axios.put(`/admin/products/${productData.productId}`, productData)
   }
+
+export async function addProductAPI(productData) {
+    const { $axios } = useNuxtApp()
+    await $axios.post('/admin/products/add', productData)
+  }
